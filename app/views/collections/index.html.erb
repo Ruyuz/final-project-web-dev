@@ -1,0 +1,80 @@
+<%= stylesheet_link_tag 'vinyl_index' %>
+
+<h1 class="text-center">Collections</h1>
+
+<% if session[:user_id] != nil %>
+
+<div class="container">
+  <div class="row">
+
+  <div class="mx-auto my-3">
+    <%= link_to "+ Create New Collection", "/collections/new", class: 'btn btn-primary' %>
+  </div>
+  </div>
+
+
+  <% if not @collections.empty? %>
+  <div class="row">
+
+  <table class="table table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <th>Collection</th>
+        <th>Vinyls</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>  
+      <% @collections.each do |collection| %>
+      <tr>
+        <td><%= link_to collection.name, "/collections/#{collection.id}" %>
+        </td>
+
+        <td><ul>
+          <% collection.vinyls.order('year').first(5).each do |vinyl| %>
+            <li><i><%= vinyl.title %></i> 
+              <% if vinyl.year.present? %>
+                (<%= vinyl.year %>)
+              <% end %>
+            </li>
+          <% end %>
+        </ul></td>
+
+        <td>
+          <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="/collections/<%=collection.id%>/edit">Edit Name</a>
+              <a class="dropdown-item" href="/collections/<%=collection.id%>" data-method="delete" data-confirm="Are you sure you want to delete the collection?">Delete</a>
+            </div>
+          </div>
+        </td>
+
+
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+  <% else %>
+  <div class="row">
+    <div class="col-sm-4 offset-sm-4 text-center">
+      <br>
+      <i>You don't have any collections yet.<br>Why not add one now?</i>
+    </div>
+  </div>
+  <% end %>
+  
+
+  </div>
+</div>
+
+<% else %> 
+  <p class="text-center">
+    <%= link_to "Log in", "/sessions/new" %> to access the collections page.
+  </p>
+<% end %>
+

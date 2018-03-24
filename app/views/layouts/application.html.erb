@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Vinyl Countdown</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  </head>
+
+  <body>
+<!--     <nav class="navbar navbar-inverse">
+ -->
+     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation">
+
+         <div class="navbar-header">
+
+           <!-- Navbar Brand: Logo or Brand Name -->
+          <a class="navbar-brand" href="/">The Vinyl Countdown</a>
+           <!-- Toggle Button -->         
+          <button type="button" class="navbar-toggler collapsed " data-toggle="collapse" data-target="#myNavbar" aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button> 
+        </div>
+
+      <!-- Navbar Menu -->
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="mr-auto navbar-nav mt-2 mt-md-0">
+            <li class="nav-item" class="active"><a class="nav-link" href="/vinyls">Vinyls</a></li>
+            <li class="nav-item"><a class="nav-link" href="/artists">Artists</a></li>            
+            <% if session[:user_id] != nil %>
+              <li class="nav-item"><a class="nav-link" href="/collections">Collections</a></li>
+            <% end %>
+          </ul>
+
+          <form class="form-inline my-2 my-lg-0 mx-auto" action="/vinyls">
+            <input name="search" class="form-control mr-sm-2" size="30" type="search" placeholder="Search for vinyl by title, artist..." aria-label="Search">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+          </form>
+
+          <ul class="navbar-nav ml-auto">
+              <% if session[:user_id] != nil %>
+                <li class="nav-item"><a class="nav-link" href="/users/<%= session[:user_id] %>">Hello <%= User.find_by(id: session[:user_id]).email %></a></li> 
+                <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+              <% else %>
+                <li class="nav-item"><a class="nav-link" href="/users/new">Sign Up</a></li>
+                <li class="nav-item"><a class="nav-link" href="/sessions/new">Log In</a></li>
+              <% end %>
+            </li>
+          </ul>
+        </div>
+
+<!-- Using pills instead?
+         
+         <div class="navbar-header">
+
+          <a class="navbar-brand" href="/">The Vinyl Countdown</a>
+          <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#myNavbar" aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="mr-auto nav nav-pills head-menu mt-2 mt-md-0">  
+            <li class="nav-item"><a class="nav-link active" href="/vinyls" id="vinyls">Vinyls</a></li>
+            <li class="nav-item"><a class="nav-link" href="/artists" id="artists">Artists</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" id="actors">Actors</a></li>                
+            
+            </li>
+          </ul>
+        </div>
+ -->
+
+    </nav>
+
+
+    <div class="container-fluid">
+
+      <br>
+
+      <% if flash[:error] %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>Oh snap! </strong><%= flash[:error].html_safe %>
+        </div>
+      <% end %>
+
+      <% if flash[:success] %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>Groovy! </strong><%= flash[:success].html_safe %>
+        </div>
+      <% end %>
+
+      <% if flash[:notice] %>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+          <%= flash[:notice].html_safe %>
+        </div>
+      <% end %>
+
+      <%= yield %>
+
+    </div>
+
+   
+  </body>
+</html>

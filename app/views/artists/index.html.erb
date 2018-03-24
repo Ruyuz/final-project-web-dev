@@ -1,0 +1,63 @@
+<%= stylesheet_link_tag 'vinyl_index' %>
+
+<h1 class="text-center">Artists</h1>
+<br>
+
+<div class="container">
+  <div class="row">
+
+  <% if session[:user_id] != nil %>
+  <div class="mx-auto my-3">
+    <%= link_to "+ Add New Artist", "/artists/new", class: 'btn btn-primary' %>
+  </div>
+  <% end %>
+
+
+  <table class="table table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <th>Name</th>
+        <th>Vinyls</th>
+        <% if session[:user_id] != nil %>
+        <th>Actions</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <% Artist.all.order('name').each do |artist| %>
+      <tr>
+        <td><%= link_to artist.name, "/artists/#{artist.id}" %>
+        </td>
+
+        <td><ul>
+          <% artist.vinyls.order('year').each do |vinyl| %>
+            <li><i><%= vinyl.title %></i> 
+              <% if vinyl.year.present? %>
+                (<%= vinyl.year %>)
+              <% end %>
+            </li>
+          <% end %>
+        </ul></td>
+
+        <% if session[:user_id] != nil %>
+        <td>
+          <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="/artists/<%=artist.id%>/edit">Edit</a>
+              <a class="dropdown-item" href="/artists/<%=artist.id%>" data-method="delete" data-confirm="Are you sure? All of the artist's vinyls will be deleted as well. ">Delete</a>
+            </div>
+          </div>
+        </td>
+        <% end %>
+      
+      </tr>
+      <% end %>
+
+    </tbody>
+  </table>
+
+  </div>
+</div>
+
